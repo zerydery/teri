@@ -11,8 +11,8 @@ echo @color('purple', "OTP\t\t: ");
 $otp = trim(fgets(STDIN));
 $login = otplogin($nomor,$otp);
 if (strpos(json_encode($login), '"status":true')) {
-	$secret = $login['secretKey'];
-	$plan = $login['callPlan'];
+    $secret = $login['secretKey'];
+    $plan = $login['callPlan'];
     $nomor = $login['msisdn'];
     $profil = profil($nomor,$plan,$secret);
     $balance = $profil['creditBalance'];
@@ -20,17 +20,17 @@ if (strpos(json_encode($login), '"status":true')) {
     $sisakuota = $profil['sumOfInternet'];
     $poin = $profil['stotalPoin'];
 
-	echo @color('yellow', "PULSA\t\t: ");
-	echo @color('nevy', "$balance\n");
-	echo @color('yellow', "MASA AKTIF\t: ");
-	echo @color('nevy', "$aktif\n");
+    echo @color('yellow', "PULSA\t\t: ");
+    echo @color('nevy', "$balance\n");
+    echo @color('yellow', "MASA AKTIF\t: ");
+    echo @color('nevy', "$aktif\n");
     echo @color('yellow', "SISA KUOTA\t: ");
     echo @color('nevy', "$sisakuota\n");
     echo @color('yellow', "BONSTRI\t\t: ");
     echo @color('nevy', "$poin Poin\n");
     cek:
     echo @color('green', "PILIH PAKET:\n");
-    echo @color('yellow', "[1] Welcome Reward 5GB ==> Rp 1\n[2] (NEW) 10GB 30 Hari ==> Rp 15000\n[3] (NEW) 15GB 30 Hari ==> Rp 20000\n[4] 25GB 25rb (Diskon) ==> Rp 25000\n[5] 25GB 24 Jam 20 Hari ==> Rp 25000\n[6] (NEW) 25GB 20 Hari ==> Rp 25000\n[7] (NEW) 25GB 20 Hari ==> Rp 25000\n[8] 25GB 24 Jam 30 Hari ==> Rp 29000\n[9] (NEW) 25GB 30 Hari ==> Rp 29000\n[10] (NEW) 55GB 30 Hari ==> Rp 50000\n[11] (NEW) 65GB 30 Hari ==> Rp 60000\n[12] (NEW) 75GB 30 Hari ==> Rp 75000\n[13] (NEW) 90GB 30 Hari ==> Rp 90000\n[14] (NEW) 100GB 30 Hari ==> Rp 90000\n\n[[AON]]\n[15] AON 20GB 55ribu ==> Rp 55000\n[16] AON 50GB 99ribu ==> Rp 99000\n");
+    echo @color('yellow', "[1] Welcome Reward 5GB ==> Rp 1\n[2] (NEW) 10GB 30 Hari ==> Rp 15000\n[3] (NEW) 15GB 30 Hari ==> Rp 20000\n[4] 25GB 25rb (Diskon) ==> Rp 25000\n[5] 25GB 24 Jam 20 Hari ==> Rp 25000\n[6] (NEW) 25GB 20 Hari ==> Rp 25000\n[7] (NEW) 25GB 20 Hari ==> Rp 25000\n[8] 25GB 24 Jam 30 Hari ==> Rp 29000\n[9] (NEW) 25GB 30 Hari ==> Rp 29000\n[10] (NEW) 55GB 30 Hari ==> Rp 50000\n[11] (NEW) 65GB 30 Hari ==> Rp 60000\n[12] (NEW) 75GB 30 Hari ==> Rp 75000\n[13] (NEW) 90GB 30 Hari ==> Rp 90000\n[14] (NEW) 100GB 30 Hari ==> Rp 90000\n\n[[AON]]\n[15] AON 20GB 55ribu ==> Rp 55000\n[16] AON 50GB 99ribu ==> Rp 99000\n[17]18GB 7 Hari  ==> 5000\n");
     echo @color('green', "PILIH : ");
     $pilih = trim(fgets(STDIN));
     switch ($pilih) {
@@ -82,6 +82,9 @@ if (strpos(json_encode($login), '"status":true')) {
             case '16':
             $prodid = '25341';
             break;
+            case '17':
+            $prodid = '24165';
+            break;
         
         default:
             echo @color('red', "PILIH PAKET TERLEBIH DAHULU\n");
@@ -117,13 +120,13 @@ if (strpos(json_encode($login), '"status":true')) {
 }
 
 function login($nomor){
-	$host = "bimaplus.tri.co.id";        
+    $host = "bimaplus.tri.co.id";        
     $data = '{"imei":"Android 93488a982824b403","language":1,"msisdn":"'.$nomor.'"}';
     $ceknom = rekuest($host,"POST",'/api/v1/login/otp-request', $data);
         return $ceknom;
 }
 function otplogin($nomor,$otp){
-	$host = "bimaplus.tri.co.id";        
+    $host = "bimaplus.tri.co.id";        
     $data = '{"deviceManufactur":"Samsung","deviceModel":"SMG991B","deviceOs":"Android","imei":"Android 93488a982824b403","msisdn":"'.$nomor.'","otp":"'.$otp.'"}';
     $ceknom = rekuest($host,"POST",'/api/v1/login/login-with-otp', $data);
         return $ceknom;
@@ -136,7 +139,7 @@ function profil($nomor,$plan,$secret){
 }
 
 function cek($prodid){
-	$host = "my.tri.co.id";        
+    $host = "my.tri.co.id";        
     $data = '{"imei":"WebSelfcare","language":"","callPlan":"","msisdn":"","secretKey":"","subscriberType":"","productId":"'.$prodid.'"}';
     $ceknom = rekuest($host,"POST",'/apibima/product/product-detail', $data);
         return $ceknom;
@@ -151,7 +154,7 @@ function beli($nomor,$plan,$secret,$prodid){
 
 function rekuest($host, $method, $url, $data = null){ 
         $headers[] = 'Host: '.$host;
-		$headers[] = 'App-Version: 4.2.6';
+        $headers[] = 'App-Version: 4.2.6';
         $headers[] = 'Content-Type: application/json; charset=UTF-8';
         $headers[] = 'User-Agent: okhttp/4.9.0';
         
